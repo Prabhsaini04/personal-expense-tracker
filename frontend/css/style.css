@@ -1,0 +1,83 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+section {
+  margin-bottom: 2.5rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+form input,
+form select {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  padding: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.field-error {
+  display: block;
+  color: #c0392b;
+  font-size: 0.85rem;
+  min-height: 1.1em;
+}
+
+.form-status {
+  min-height: 1.2em;
+}
+
+.form-status.error {
+  color: #c0392b;
+}
+
+.form-status.success {
+  color: #27ae60;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.4rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+}
+
+.filters label {
+  margin-bottom: 0;
+}
+
+#category-list {
+  list-style: none;
+  padding: 0;
+}
+
+#category-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #eee;
+}

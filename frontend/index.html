@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personal Expense Tracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Personal Expense Tracker</h1>
+  </header>
+
+  <main>
+    <section id="expense-form-section">
+      <h2 id="expense-form-title">Add Expense</h2>
+      <form id="expense-form">
+        <input type="hidden" id="expense-id">
+        <label>
+          Amount
+          <input type="text" id="expense-amount" inputmode="decimal" required>
+          <span class="field-error" id="error-amount"></span>
+        </label>
+        <label>
+          Category
+          <select id="expense-category" required></select>
+          <span class="field-error" id="error-category_id"></span>
+        </label>
+        <label>
+          Date
+          <input type="date" id="expense-date" required>
+          <span class="field-error" id="error-expense_date"></span>
+        </label>
+        <label>
+          Description
+          <input type="text" id="expense-description" maxlength="500">
+          <span class="field-error" id="error-description"></span>
+        </label>
+        <button type="submit" id="expense-submit">Add Expense</button>
+        <button type="button" id="expense-cancel-edit" hidden>Cancel</button>
+      </form>
+      <p class="form-status" id="expense-form-status"></p>
+    </section>
+
+    <section id="expense-list-section">
+      <h2>Expenses</h2>
+      <div class="filters">
+        <label>
+          Category
+          <select id="filter-category"><option value="">All</option></select>
+        </label>
+        <label>
+          Start date
+          <input type="date" id="filter-start-date">
+        </label>
+        <label>
+          End date
+          <input type="date" id="filter-end-date">
+        </label>
+        <button type="button" id="filter-apply">Filter</button>
+        <button type="button" id="filter-clear">Clear</button>
+      </div>
+      <p class="form-status" id="filter-status"></p>
+      <table id="expense-table">
+        <thead>
+          <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr>
+        </thead>
+        <tbody id="expense-table-body"></tbody>
+      </table>
+      <p id="expense-empty-state" hidden>No expenses recorded yet.</p>
+    </section>
+
+    <section id="category-section">
+      <h2>Categories</h2>
+      <form id="category-form">
+        <label>
+          New category
+          <input type="text" id="category-name" required>
+        </label>
+        <button type="submit">Add Category</button>
+      </form>
+      <p class="form-status" id="category-form-status"></p>
+      <ul id="category-list"></ul>
+    </section>
+
+    <section id="reports-section">
+      <h2>Reports</h2>
+      <div class="filters">
+        <label>
+          Start date
+          <input type="date" id="report-start-date">
+        </label>
+        <label>
+          End date
+          <input type="date" id="report-end-date">
+        </label>
+        <button type="button" id="report-run">Run reports</button>
+      </div>
+      <p class="form-status" id="report-status"></p>
+
+      <h3>Totals by category</h3>
+      <table id="category-totals-table">
+        <thead><tr><th>Category</th><th>Total</th></tr></thead>
+        <tbody id="category-totals-body"></tbody>
+      </table>
+
+      <h3>Totals by month</h3>
+      <table id="monthly-totals-table">
+        <thead><tr><th>Month</th><th>Total</th></tr></thead>
+        <tbody id="monthly-totals-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/categories.js"></script>
+  <script src="/js/expenses.js"></script>
+  <script src="/js/reports.js"></script>
+</body>
+</html>
