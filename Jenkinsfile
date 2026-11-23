@@ -10,12 +10,15 @@
 // neither tool is configured in this environment. Add a Scan stage once
 // one is set up; until then this is NOT a substitute for that check.
 //
+// Runs on the Jenkins built-in node: confirmed the jenkins system user is
+// in the docker group on this host, so `docker`/`docker compose` work
+// directly without a separate labeled agent.
+//
 // UNKNOWN / not yet confirmed on this Jenkins instance:
-//   - which agent/label has Docker available (placeholder: 'linux-docker')
 //   - how `.env` (DB credentials) reaches the agent — see "Prepare env" below
 
 pipeline {
-  agent { label 'linux-docker' }
+  agent any
 
   options {
     timestamps()
