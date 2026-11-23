@@ -24,6 +24,10 @@ const Categories = (() => {
     }
   }
 
+  function all() {
+    return cache;
+  }
+
   function nameById(id) {
     const category = cache.find((c) => String(c.id) === String(id));
     return category ? category.name : "Uncategorized";
@@ -37,38 +41,49 @@ const Categories = (() => {
     populateSelect(document.getElementById("expense-category"));
     populateSelect(document.getElementById("filter-category"), { includeAll: true });
     renderList();
+    document.dispatchEvent(new CustomEvent("categories:changed"));
   }
 
   function renderList() {
     const list = document.getElementById("category-list");
     list.textContent = "";
+    if (cache.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-state";
+      empty.textContent = "No categories yet. Add one above.";
+      list.appendChild(empty);
+      return;
+    }
     for (const category of cache) {
-      const li = document.createElement("li");
+      const chip = document.createElement("span");
+      chip.className = "chip";
 
       const name = document.createElement("span");
       name.textContent = category.name;
-      li.appendChild(name);
+      chip.appendChild(name);
 
       const deleteBtn = document.createElement("button");
       deleteBtn.type = "button";
-      deleteBtn.textContent = "Delete";
-      deleteBtn.addEventListener("click", () => deleteCategory(category.id));
-      li.appendChild(deleteBtn);
+      deleteBtn.textContent = "×";
+      deleteBtn.setAttribute("aria-label", `Delete ${category.name}`);
+      deleteBtn.addEventListener("click", () => deleteCategory(category));
+      chip.appendChild(deleteBtn);
 
-      list.appendChild(li);
+      list.appendChild(chip);
     }
   }
 
-  async function deleteCategory(id) {
-    const { ok, status, data } = await Api.del(`/api/categories/${id}`);
-    const status_el = document.getElementById("category-form-status");
+  async function deleteCategory(category) {
+    const confirmed = await Confirm.ask(`Delete category "${category.name}"?`);
+    if (!confirmed) return;
+
+    const { ok, data } = await Api.del(`/api/categories/${category.id}`);
     if (ok) {
-      status_el.textContent = "";
+      Toast.success(`Category "${category.name}" deleted.`);
       await refresh();
-      return;
+    } else {
+      Toast.error((data && data.error) || "Could not delete category.");
     }
-    status_el.className = "form-status error";
-    status_el.textContent = (data && data.error) || `Could not delete category (HTTP ${status}).`;
   }
 
   function init() {
@@ -76,22 +91,19 @@ const Categories = (() => {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const input = document.getElementById("category-name");
-      const status = document.getElementById("category-form-status");
       const { ok, data } = await Api.post("/api/categories", { name: input.value });
       if (ok) {
         input.value = "";
-        status.className = "form-status success";
-        status.textContent = "Category added.";
+        Toast.success("Category added.");
         await refresh();
       } else {
-        status.className = "form-status error";
-        status.textContent = (data && (data.error || Object.values(data.errors || {})[0])) ||
-          "Could not add category.";
+        Toast.error((data && (data.error || Object.values(data.errors || {})[0])) ||
+          "Could not add category.");
       }
     });
 
     refresh();
   }
 
-  return { init, refresh, nameById };
+  return { init, refresh, nameById, all };
 })();
